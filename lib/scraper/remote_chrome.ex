@@ -13,7 +13,7 @@ defmodule Scraper.RemoteChrome do
   """
   @spec open_tab() :: {:ok, String.t(), pid()} | {:error, term()}
   def open_tab() do
-    with {:ok, page} <- Session.new() |> Session.new_page(),
+    with {:ok, page} <- new_session() |> Session.new_page(),
          {:ok, page_id} <- Map.fetch(page, "id"),
          {:ok, page_pid} <- PageSession.start_link(page),
          do: {:ok, page_id, page_pid}
@@ -24,7 +24,7 @@ defmodule Scraper.RemoteChrome do
   """
   @spec close_tab(page_id :: String.t()) :: {:ok, Map.t()} | {:error, term()}
   def close_tab(page_id) do
-    Session.new() |> Session.close_page(page_id)
+    new_session() |> Session.close_page(page_id)
   end
 
   @doc """
@@ -133,5 +133,11 @@ defmodule Scraper.RemoteChrome do
         [_name, value] -> {:ok, value}
       end
     end
+  end
+
+  defp new_session() do
+    host = Application.fetch_env!(:scraper, :chrome_host)
+    port = Application.fetch_env!(:scraper, :chrome_port)
+    Session.new(host: host, port: port)
   end
 end

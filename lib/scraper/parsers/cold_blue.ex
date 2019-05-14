@@ -10,7 +10,7 @@ defmodule Scraper.Parsers.ColdBlue do
     {:ok, rating} = get_rating(page_pid, root_node_id)
     {:ok, reviews_count} = get_reviews_count(page_pid, root_node_id)
     {:ok, price} = get_price(page_pid, root_node_id)
-    {:ok, images} = get_image_urls(page_pid, root_node_id) |> IO.inspect
+    {:ok, images} = get_image_urls(page_pid, root_node_id)
 
     # Should use decimal for prices
     %Product{
@@ -56,12 +56,13 @@ defmodule Scraper.Parsers.ColdBlue do
 
   defp get_image_urls(page_pid, root_node_id) do
     with {:ok, images} <- get_nodes(page_pid, root_node_id, ".product-media-gallery__item-image") do
-      image_urls = Enum.map(images, fn image ->
-        {:ok, url} = get_node_attribute(image, "src")
-        url
-      end)
+      image_urls =
+        Enum.map(images, fn image ->
+          {:ok, url} = get_node_attribute(image, "src")
+          url
+        end)
 
-      {:ok ,image_urls}
+      {:ok, image_urls}
     end
   end
 end

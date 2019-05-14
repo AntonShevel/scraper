@@ -1,5 +1,6 @@
 defmodule Scraper.Product do
   alias __MODULE__
+  @derive [Poison.Encoder]
 
   @enforce_keys [:title, :rating, :reviews_count, :images, :price]
 

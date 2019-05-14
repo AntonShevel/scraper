@@ -6,10 +6,12 @@ defmodule Scraper.Application do
   use Application
 
   def start(_type, _args) do
+    size = Application.fetch_env!(:scraper, :worker_count)
+
     poolboy_config = [
       {:name, {:local, :worker}},
       {:worker_module, Scraper.Worker},
-      {:size, 2},
+      {:size, size},
       {:max_overflow, 0}
     ]
 
