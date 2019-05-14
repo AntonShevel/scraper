@@ -15,9 +15,7 @@ defmodule Scraper.Parser do
 
   def perform(page_pid, url) when is_pid(page_pid) do
     parser = get_parser(url)
-    product = apply(parser, :parse, [page_pid])
-    log_product(product)
-    product
+    apply(parser, :parse, [page_pid])
   end
 
   defp get_parser(url) do
@@ -25,9 +23,5 @@ defmodule Scraper.Parser do
       "https://www.coolblue.nl/product" <> _url -> ColdBlue
       _ -> raise "no parser defined for #{url}"
     end
-  end
-
-  defp log_product(product) do
-    product |> Poison.encode!() |> IO.inspect()
   end
 end

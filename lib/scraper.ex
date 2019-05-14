@@ -1,4 +1,5 @@
 defmodule Scraper do
+  alias Scraper.Product
   @timeout 50000
 
   @doc """
@@ -38,8 +39,17 @@ defmodule Scraper do
   defp parse_url(url) do
     :poolboy.transaction(
       :worker,
-      fn pid -> GenServer.call(pid, {:parse, url}, @timeout) end,
+      fn pid ->
+        pid |> GenServer.call({:parse, url}, @timeout) |> log_result
+      end,
       @timeout
     )
   end
+
+  defp log_result(%Product{} = res) do
+    res |> Poison.encode!() |> IO.inspect()
+    res
+  end
+
+  defp log_result(res), do: IO.inspect(res)
 end
