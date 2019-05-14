@@ -23,7 +23,6 @@ defmodule Scraper.MixProject do
   defp deps do
     [
       {:chrome_remote_interface, "~> 0.3.0"},
-      {:sweet_xml, "~> 0.6.6"},
       {:poolboy, "~> 1.5"},
       {:poison, "~> 3.1"}
     ]
